@@ -1,4 +1,4 @@
-use rdev::{Button, EventType, Key, SimulateError, simulate};
+use inputlib::{Button, EventType, Key, SimulateError, simulate};
 use std::{
     thread,
     time::{self, Duration},

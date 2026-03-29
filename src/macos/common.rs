@@ -1,6 +1,6 @@
 #![allow(clippy::upper_case_acronyms)]
+use crate::inputlib::{Button, Event, EventType};
 use crate::macos::keyboard::Keyboard;
-use crate::rdev::{Button, Event, EventType};
 use core::ptr::NonNull;
 use lazy_static::lazy_static;
 use objc2_core_graphics::{CGEvent, CGEventField, CGEventFlags, CGEventType};

@@ -1,6 +1,6 @@
 #![allow(improper_ctypes_definitions)]
+use crate::inputlib::{Event, GrabError};
 use crate::macos::common::*;
-use crate::rdev::{Event, GrabError};
 use objc2_core_foundation::{CFMachPort, CFRunLoop, kCFRunLoopCommonModes};
 use objc2_core_graphics::{
     CGEvent, CGEventTapCallBack, CGEventTapLocation, CGEventTapOptions, CGEventTapPlacement,

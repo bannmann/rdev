@@ -1,6 +1,6 @@
 use super::keycodes::code_from_key;
 use super::xkb_keycodes::internal_to_xkb_keycode;
-use crate::rdev::{EventType, Key, KeyboardState};
+use crate::inputlib::{EventType, Key, KeyboardState};
 use xkbcommon::xkb;
 
 #[allow(dead_code)]
@@ -26,7 +26,7 @@ pub struct Keyboard {
 }
 
 impl Keyboard {
-    pub fn new() -> Result<Self, crate::rdev::SimulateError> {
+    pub fn new() -> Result<Self, crate::inputlib::SimulateError> {
         let context = xkb::Context::new(xkb::CONTEXT_NO_FLAGS);
 
         // Get current keyboard layout information from environment
@@ -44,7 +44,7 @@ impl Keyboard {
             Some("terminate:ctrl_alt_bksp".to_string()),
             xkb::KEYMAP_COMPILE_NO_FLAGS,
         )
-        .ok_or(crate::rdev::SimulateError)?;
+        .ok_or(crate::inputlib::SimulateError)?;
 
         let state = xkb::State::new(&keymap);
         // Lookup modifier indices

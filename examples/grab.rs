@@ -1,4 +1,4 @@
-use rdev::{Event, EventType, Key, grab};
+use inputlib::{Event, EventType, Key, grab};
 
 fn main() {
     // This will block.

@@ -1,6 +1,6 @@
 #![allow(improper_ctypes_definitions)]
+use crate::inputlib::{Event, ListenError};
 use crate::macos::common::*;
-use crate::rdev::{Event, ListenError};
 use core::ptr::NonNull;
 use objc2_core_foundation::{CFMachPort, CFRunLoop, kCFRunLoopCommonModes};
 use objc2_core_graphics::{

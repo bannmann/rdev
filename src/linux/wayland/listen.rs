@@ -1,7 +1,7 @@
 extern crate libc;
 use super::keyboard::Keyboard;
 use super::keycodes::key_from_code;
-use crate::rdev::{Event, KeyboardState, ListenError};
+use crate::inputlib::{Event, KeyboardState, ListenError};
 use crate::{Button, EventType};
 use input::event::PointerEvent;
 use input::event::keyboard::{KeyState, KeyboardEventTrait};
@@ -26,17 +26,17 @@ fn convert_type(libevent: LibEvent) -> Option<EventType> {
             }
         }
         LibEvent::Pointer(PointerEvent::Button(btn)) => {
-            let rdev_btn = match btn.button() {
+            let inputlib_btn = match btn.button() {
                 272 => Some(Button::Left),
                 273 => Some(Button::Right),
                 274 => Some(Button::Middle),
                 _ => None,
             };
-            if let Some(rdev_btn) = rdev_btn {
+            if let Some(inputlib_btn) = inputlib_btn {
                 let state: ButtonState = btn.button_state();
                 match state {
-                    ButtonState::Pressed => Some(EventType::ButtonPress(rdev_btn)),
-                    ButtonState::Released => Some(EventType::ButtonRelease(rdev_btn)),
+                    ButtonState::Pressed => Some(EventType::ButtonPress(inputlib_btn)),
+                    ButtonState::Released => Some(EventType::ButtonRelease(inputlib_btn)),
                 }
             } else {
                 None

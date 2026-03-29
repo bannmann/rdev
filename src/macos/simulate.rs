@@ -5,7 +5,7 @@ use objc2_core_graphics::{
 };
 
 use crate::Key;
-use crate::rdev::{Button, EventType, SimulateError};
+use crate::inputlib::{Button, EventType, SimulateError};
 use std::convert::TryInto;
 
 use crate::macos::common::LAST_FLAGS;

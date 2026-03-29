@@ -1,4 +1,4 @@
-use crate::rdev::{Event, EventType, ListenError};
+use crate::inputlib::{Event, EventType, ListenError};
 use crate::windows::common::{HOOK, HookError, KEYBOARD, convert, set_key_hook, set_mouse_hook};
 use std::os::raw::c_int;
 use std::ptr::null_mut;

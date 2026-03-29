@@ -1,6 +1,6 @@
 use objc2_core_graphics::{CGDisplayPixelsHigh, CGDisplayPixelsWide, CGMainDisplayID};
 
-use crate::rdev::DisplayError;
+use crate::inputlib::DisplayError;
 
 pub fn display_size() -> Result<(u64, u64), DisplayError> {
     let main = CGMainDisplayID();

@@ -1,6 +1,6 @@
 use crate::SimulateError;
+use crate::inputlib::{Button, EventType};
 use crate::linux::wayland::keycodes::ukey_from_key;
-use crate::rdev::{Button, EventType};
 use input_linux::{
     EventKind, EventTime, InputEvent, InputId, Key as UKey, KeyEvent, KeyState, RelativeAxis,
     RelativeEvent, SynchronizeEvent, SynchronizeKind, UInputHandle,
@@ -47,7 +47,7 @@ impl Handle {
                 product: 0x5678,
                 version: 1,
             };
-            let device_name = b"rdev virtual input";
+            let device_name = b"inputlib virtual input";
             uinput.create(&input_id, device_name, 0, &[]).unwrap();
             *handle = Some(uinput);
         }

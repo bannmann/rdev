@@ -1,6 +1,6 @@
 extern crate x11;
 use super::keycodes::code_from_key;
-use crate::rdev::{EventType, Key, KeyboardState};
+use crate::inputlib::{EventType, Key, KeyboardState};
 use std::ffi::CString;
 use std::os::raw::{c_char, c_int, c_uint, c_ulong, c_void};
 use std::ptr::{NonNull, null, null_mut};

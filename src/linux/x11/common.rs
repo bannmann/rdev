@@ -1,6 +1,6 @@
 use super::keyboard::Keyboard;
 use super::keycodes::key_from_code;
-use crate::rdev::{Button, Event, EventType, KeyboardState};
+use crate::inputlib::{Button, Event, EventType, KeyboardState};
 use std::convert::TryInto;
 use std::os::raw::{c_int, c_uchar, c_uint};
 use std::ptr::null;

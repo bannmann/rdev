@@ -1,4 +1,4 @@
-use crate::rdev::{Event, EventType, GrabError};
+use crate::inputlib::{Event, EventType, GrabError};
 use crate::windows::common::{HOOK, HookError, KEYBOARD, convert, set_key_hook, set_mouse_hook};
 use std::ptr::null_mut;
 use std::time::SystemTime;

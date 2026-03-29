@@ -1,6 +1,6 @@
 use super::common::Display;
 use super::keyboard::Keyboard;
-use crate::rdev::{Button, Event, EventType, GrabError, Key, KeyboardState};
+use crate::inputlib::{Button, Event, EventType, GrabError, Key, KeyboardState};
 use epoll::ControlOptions::{EPOLL_CTL_ADD, EPOLL_CTL_DEL};
 use evdev_rs::{
     Device, InputEvent, UInputDevice,
@@ -22,23 +22,23 @@ use std::time::SystemTime;
 // to take into account ??
 
 macro_rules! convert_keys {
-    ($($ev_key:ident, $rdev_key:ident),*) => {
+    ($($ev_key:ident, $inputlib_key:ident),*) => {
         //TODO: make const when rust lang issue #49146 is fixed
         #[allow(unreachable_patterns)]
-        fn evdev_key_to_rdev_key(key: &EV_KEY) -> Option<Key> {
+        fn evdev_key_to_inputlib_key(key: &EV_KEY) -> Option<Key> {
             match key {
                 $(
-                    EV_KEY::$ev_key => Some(Key::$rdev_key),
+                    EV_KEY::$ev_key => Some(Key::$inputlib_key),
                 )*
                 _ => None,
             }
         }
 
         // //TODO: make const when rust lang issue #49146 is fixed
-        // fn rdev_key_to_evdev_key(key: &Key) -> Option<EV_KEY> {
+        // fn inputlib_key_to_evdev_key(key: &Key) -> Option<EV_KEY> {
         //     match key {
         //         $(
-        //             Key::$rdev_key => Some(EV_KEY::$ev_key),
+        //             Key::$inputlib_key => Some(EV_KEY::$ev_key),
         //         )*
         //         _ => None
         //     }
@@ -47,22 +47,22 @@ macro_rules! convert_keys {
 }
 
 macro_rules! convert_buttons {
-    ($($ev_key:ident, $rdev_key:ident),*) => {
+    ($($ev_key:ident, $inputlib_key:ident),*) => {
         //TODO: make const when rust lang issue #49146 is fixed
-        fn evdev_key_to_rdev_button(key: &EV_KEY) -> Option<Button> {
+        fn evdev_key_to_inputlib_button(key: &EV_KEY) -> Option<Button> {
             match key {
                 $(
-                    EV_KEY::$ev_key => Some(Button::$rdev_key),
+                    EV_KEY::$ev_key => Some(Button::$inputlib_key),
                 )*
                 _ => None,
             }
         }
 
         // //TODO: make const when rust lang issue #49146 is fixed
-        // fn rdev_button_to_evdev_key(event: &Button) -> Option<EV_KEY> {
+        // fn inputlib_button_to_evdev_key(event: &Button) -> Option<EV_KEY> {
         //     match event {
         //         $(
-        //             Button::$rdev_key => Some(EV_KEY::$ev_key),
+        //             Button::$inputlib_key => Some(EV_KEY::$ev_key),
         //         )*
         //         _ => None
         //     }
@@ -200,7 +200,7 @@ convert_keys!(
     KEY_F24, F24
 );
 
-fn evdev_event_to_rdev_event(
+fn evdev_event_to_inputlib_event(
     event: &InputEvent,
     x: &mut f64,
     y: &mut f64,
@@ -209,13 +209,13 @@ fn evdev_event_to_rdev_event(
 ) -> Option<EventType> {
     match &event.event_code {
         EventCode::EV_KEY(key) => {
-            if let Some(button) = evdev_key_to_rdev_button(key) {
+            if let Some(button) = evdev_key_to_inputlib_button(key) {
                 // first check if pressed key is a mouse button
                 match event.value {
                     0 => Some(EventType::ButtonRelease(button)),
                     _ => Some(EventType::ButtonPress(button)),
                 }
-            } else if let Some(key) = evdev_key_to_rdev_key(key) {
+            } else if let Some(key) = evdev_key_to_inputlib_key(key) {
                 // check if pressed key is a keyboard key
                 match event.value {
                     0 => Some(EventType::KeyRelease(key)),
@@ -257,31 +257,31 @@ fn evdev_event_to_rdev_event(
                 delta_x: 0,
                 delta_y: event.value.into(),
             }),
-            // Other EV_REL events cannot be represented by rdev
+            // Other EV_REL events cannot be represented by inputlib
             _ => None,
         },
-        // Other event_codes cannot be represented by rdev,
+        // Other event_codes cannot be represented by inputlib,
         // and some never will e.g. EV_SYN
         _ => None,
     }
 }
 
-// fn rdev_event_to_evdev_event(event: &EventType, time: &TimeVal) -> Option<InputEvent> {
+// fn inputlib_event_to_evdev_event(event: &EventType, time: &TimeVal) -> Option<InputEvent> {
 //     match event {
 //         EventType::KeyPress(key) => {
-//             let key = rdev_key_to_evdev_key(&key)?;
+//             let key = inputlib_key_to_evdev_key(&key)?;
 //             Some(InputEvent::new(&time, &EventCode::EV_KEY(key), 1))
 //         }
 //         EventType::KeyRelease(key) => {
-//             let key = rdev_key_to_evdev_key(&key)?;
+//             let key = inputlib_key_to_evdev_key(&key)?;
 //             Some(InputEvent::new(&time, &EventCode::EV_KEY(key), 0))
 //         }
 //         EventType::ButtonPress(button) => {
-//             let button = rdev_button_to_evdev_key(&button)?;
+//             let button = inputlib_button_to_evdev_key(&button)?;
 //             Some(InputEvent::new(&time, &EventCode::EV_KEY(button), 1))
 //         }
 //         EventType::ButtonRelease(button) => {
-//             let button = rdev_button_to_evdev_key(&button)?;
+//             let button = inputlib_button_to_evdev_key(&button)?;
 //             Some(InputEvent::new(&time, &EventCode::EV_KEY(button), 0))
 //         }
 //         EventType::MouseMove { x, y } => {
@@ -328,18 +328,18 @@ where
     let w = width as f64;
     let h = height as f64;
     filter_map_events(|event| {
-        let event_type = match evdev_event_to_rdev_event(&event, &mut x, &mut y, w, h) {
-            Some(rdev_event) => rdev_event,
+        let event_type = match evdev_event_to_inputlib_event(&event, &mut x, &mut y, w, h) {
+            Some(inputlib_event) => inputlib_event,
             // If we can't convert event, simulate it
             None => return (Some(event), GrabStatus::Continue),
         };
         let name = kb.add(&event_type);
-        let rdev_event = Event {
+        let inputlib_event = Event {
             time: SystemTime::now(),
             name,
             event_type,
         };
-        if callback(rdev_event).is_some() {
+        if callback(inputlib_event).is_some() {
             (Some(event), GrabStatus::Continue)
         } else {
             // callback returns None, swallow the event

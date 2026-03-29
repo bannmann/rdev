@@ -1,4 +1,4 @@
-use rdev::{Event, listen};
+use inputlib::{Event, listen};
 
 fn main() {
     // This will block.

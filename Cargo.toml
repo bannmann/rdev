@@ -1,13 +1,11 @@
 [package]
-name = "rdev"
+name = "inputlib"
 version = "0.6.0"
-authors = ["Nicolas Patry <patry.nicolas@protonmail.com>"]
 edition = "2024"
-
-description = "Listen and send keyboard and mouse events on Windows, Linux and MacOS."
-documentation = "https://docs.rs/rdev/"
-homepage = "https://github.com/Narsil/rdev"
-repository = "https://github.com/Narsil/rdev"
+description = "Listen and send keyboard and mouse events on Windows, Linux and MacOS. Forked from rdev."
+documentation = "https://docs.rs/inputlib/"
+homepage = "https://github.com/bannmann/inputlib"
+repository = "https://github.com/bannmann/inputlib"
 readme = "README.md"
 keywords = ["input", "mouse", "testing", "keyboard", "automation"]
 categories = ["development-tools::testing", "api-bindings", "hardware-support"]
@@ -35,7 +33,6 @@ objc2-foundation = "0.3.1"
 objc2-core-graphics = "0.3.1"
 objc2-core-foundation = "0.3.1"
 objc2 = "0.6.1"
-
 
 [target.'cfg(all(target_family = "unix", not(target_os = "macos")))'.dependencies]
 libc = "0.2"

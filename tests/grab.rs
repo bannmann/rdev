@@ -1,5 +1,5 @@
+use inputlib::{Event, EventType, Key, grab, listen, simulate};
 use lazy_static::lazy_static;
-use rdev::{Event, EventType, Key, grab, listen, simulate};
 use serial_test::serial;
 use std::error::Error;
 use std::sync::Mutex;

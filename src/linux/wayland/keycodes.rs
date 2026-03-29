@@ -1,4 +1,4 @@
-use crate::rdev::Key;
+use crate::inputlib::Key;
 use input_linux::Key as UKey;
 use std::os::raw::c_uint;
 
