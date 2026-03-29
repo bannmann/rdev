@@ -52,7 +52,7 @@ jobs:
           test: cargo test --verbose --all-features
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@main
     - name: CargoFmt
       run: rustup component add rustfmt
     - name: Dependencies
